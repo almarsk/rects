@@ -3,6 +3,7 @@ window.addEventListener("load", ()=>{
     const cont = document.querySelector('#cont')
     const ctx = canvas.getContext('2d')
     let coord
+    let newCoord
 
     //resizing
     function resize(){
@@ -24,19 +25,21 @@ window.addEventListener("load", ()=>{
     canvas.addEventListener('mousedown', e=>{ 
         
         coord = getCoordinates(e)
-        console.log(coord)
+        //console.log(coord)
         ctx.fillStyle = 'hsl('+Math.floor(Math.random()*360)+', 100%, 50%)'
         canvas.addEventListener('mousemove', draw)
     })
 
     //draw a rectangle
-    function draw(e){
-        
-        ctx.clearRect(coord.x,coord.y,getCoordinates(e).x-coord.x,getCoordinates(e).y-coord.y)
-        ctx.strokeRect(coord.x,coord.y,getCoordinates(e).x-coord.x,getCoordinates(e).y-coord.y)
+    function draw(e){        
+        if(newCoord) ctx.clearRect(coord.x,coord.y,newCoord.x-coord.x,newCoord.y-coord.y)
+        newCoord = getCoordinates(e)
+        console.log(newCoord)
+        ctx.strokeRect(coord.x,coord.y,newCoord.x-coord.x,newCoord.y-coord.y)
     }
 
     canvas.addEventListener('mouseup',(e)=>{
+        newCoord = {}
         canvas.removeEventListener('mousemove', draw)       
         ctx.fillRect(coord.x,coord.y,getCoordinates(e).x-coord.x,getCoordinates(e).y-coord.y)
     })
